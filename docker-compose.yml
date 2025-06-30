@@ -1,0 +1,238 @@
+# Docker Compose Configuration for Python HTTP Server Educational Project
+# This file provides development environment automation for both native Python 
+# and Flask implementations, enabling quick startup and container orchestration learning
+
+version: '3.8'
+
+# Define the services for both implementation approaches
+services:
+
+  # Native Python HTTP Server Implementation
+  # Demonstrates pure Python http.server module usage without external dependencies
+  python-native:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Use build argument to specify which implementation to run
+      args:
+        - IMPLEMENTATION=native
+    
+    # Service configuration
+    container_name: python-http-native
+    
+    # Port mapping for the native implementation
+    # Maps host port 3000 to container port 3000 for direct access
+    ports:
+      - "3000:3000"
+    
+    # Environment variable configuration for native implementation
+    environment:
+      - PORT=3000
+      - HOST=0.0.0.0  # Required for Docker container networking
+      - DEBUG=true
+      - IMPLEMENTATION=native
+    
+    # Alternative environment file loading (if .env exists)
+    env_file:
+      - .env
+    
+    # Volume mounting for development workflow
+    # Enables live code editing without container rebuild
+    volumes:
+      - .:/app
+      - /app/__pycache__  # Exclude Python cache files
+    
+    # Working directory inside container
+    working_dir: /app
+    
+    # Command to start the native Python HTTP server
+    command: python server.py
+    
+    # Restart policy for development stability
+    restart: unless-stopped
+    
+    # Health check to verify server is responding
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/hello"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    
+    # Network configuration
+    networks:
+      - python-server-network
+
+  # Flask Framework Implementation
+  # Demonstrates industry-standard Flask framework patterns and WSGI deployment
+  python-flask:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Use build argument to specify Flask implementation
+      args:
+        - IMPLEMENTATION=flask
+    
+    # Service configuration
+    container_name: python-http-flask
+    
+    # Port mapping for the Flask implementation
+    # Maps host port 8000 to container port 3000 to avoid conflicts
+    ports:
+      - "8000:3000"
+    
+    # Environment variable configuration for Flask implementation
+    environment:
+      - PORT=3000
+      - HOST=0.0.0.0  # Required for Docker container networking
+      - DEBUG=true
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - IMPLEMENTATION=flask
+    
+    # Alternative environment file loading (if .env exists)
+    env_file:
+      - .env
+    
+    # Volume mounting for development workflow
+    # Enables live code editing and Flask auto-reload functionality
+    volumes:
+      - .:/app
+      - /app/__pycache__  # Exclude Python cache files
+      - /app/.pytest_cache  # Exclude pytest cache
+    
+    # Working directory inside container
+    working_dir: /app
+    
+    # Command to start the Flask development server
+    # Using flask run for development with auto-reload capability
+    command: flask run --host=0.0.0.0 --port=3000 --debug
+    
+    # Restart policy for development stability
+    restart: unless-stopped
+    
+    # Health check to verify Flask server is responding
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/hello"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s  # Flask takes slightly longer to start
+    
+    # Network configuration
+    networks:
+      - python-server-network
+    
+    # Dependency ordering - Flask service depends on successful native service
+    depends_on:
+      python-native:
+        condition: service_healthy
+
+  # Educational Development Tools Service (Optional)
+  # Provides additional development utilities and monitoring
+  dev-tools:
+    image: alpine:3.18
+    container_name: python-dev-tools
+    
+    # Development utilities and monitoring commands
+    command: >
+      sh -c "
+        echo '=== Python HTTP Server Development Environment ==='
+        echo 'Native Python Server: http://localhost:3000/hello'
+        echo 'Flask Server: http://localhost:8000/hello'
+        echo 'Use docker-compose logs -f [service-name] to view logs'
+        echo 'Services: python-native, python-flask'
+        echo '=== Educational Container Orchestration Active ==='
+        tail -f /dev/null
+      "
+    
+    # Network access for monitoring
+    networks:
+      - python-server-network
+    
+    # Keep container running for educational purposes
+    restart: unless-stopped
+    
+    # Dependency on both main services
+    depends_on:
+      - python-native
+      - python-flask
+
+# Network configuration for service communication
+# Creates isolated network for educational container orchestration
+networks:
+  python-server-network:
+    driver: bridge
+    name: python-http-network
+    
+    # Network configuration for educational visibility
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+
+# Volume definitions for persistent data (optional)
+# Demonstrates Docker volume concepts for educational purposes
+volumes:
+  # Named volume for application data persistence
+  app-data:
+    driver: local
+    name: python-server-data
+  
+  # Named volume for Python package cache optimization
+  pip-cache:
+    driver: local
+    name: python-pip-cache
+
+# Educational Comments and Usage Instructions
+# 
+# DEVELOPMENT WORKFLOW COMMANDS:
+# 
+# 1. Start all services:
+#    docker-compose up
+# 
+# 2. Start specific service:
+#    docker-compose up python-native
+#    docker-compose up python-flask
+# 
+# 3. Build and start with rebuild:
+#    docker-compose up --build
+# 
+# 4. Run in background (detached mode):
+#    docker-compose up -d
+# 
+# 5. View logs:
+#    docker-compose logs -f python-native
+#    docker-compose logs -f python-flask
+# 
+# 6. Stop all services:
+#    docker-compose down
+# 
+# 7. Stop and remove volumes:
+#    docker-compose down -v
+# 
+# EDUCATIONAL ENDPOINTS:
+# 
+# - Native Python Server: http://localhost:3000/hello
+# - Flask Framework Server: http://localhost:8000/hello
+# - Both should return "Hello world" response
+# 
+# MULTI-SERVICE DEVELOPMENT PATTERNS:
+# 
+# This configuration demonstrates:
+# - Service isolation and communication
+# - Environment variable management
+# - Volume mounting for development
+# - Health checks and service dependencies
+# - Network configuration and port mapping
+# - Container orchestration with Docker Compose
+# 
+# CUSTOMIZATION OPTIONS:
+# 
+# - Modify port mappings in the 'ports' sections
+# - Adjust environment variables for different configurations
+# - Add additional services for extended functionality
+# - Configure custom networks for service isolation
+# - Implement additional health checks and monitoring
