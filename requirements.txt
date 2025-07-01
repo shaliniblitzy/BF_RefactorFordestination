@@ -1,0 +1,40 @@
+# Requirements for Flask HTTP Server Implementation
+# Python Flask migration from Node.js HTTP server
+# Supports educational dual implementation approach (native Python + Flask framework)
+
+# Core Flask Framework Dependencies
+Flask==2.3.2
+# WSGI web application framework
+# - Lightweight, minimal learning curve for educational purposes
+# - Industry-standard Python web framework
+# - Compatible with Python 3.8+ environments
+# - Provides decorator-based routing (@app.route)
+# - Includes built-in development server via 'flask run'
+
+# Environment Configuration Management
+python-dotenv==1.0.0
+# Environment variable management (.env file support)
+# - Enables .env file support similar to Node.js applications
+# - Simplifies configuration across development/production environments
+# - Provides load_dotenv() function for environment variable loading
+# - Optional for native implementation, recommended for Flask
+
+# Optional Production Server (uncomment for production deployment)
+# gunicorn==20.1.0
+# Production-grade WSGI HTTP server for Flask applications
+# - Multi-worker process management for scalability
+# - Compatible with Docker containers and cloud platforms
+# - Enhanced performance over Flask development server
+# - Usage: gunicorn app:app
+
+# Installation Instructions:
+# 1. Create virtual environment: python -m venv venv
+# 2. Activate virtual environment:
+#    - Linux/macOS: source venv/bin/activate
+#    - Windows: venv\Scripts\activate
+# 3. Install dependencies: pip install -r requirements.txt
+# 4. Run Flask server: python app.py or flask run
+#
+# For production deployment, uncomment gunicorn and run:
+# pip install -r requirements.txt
+# gunicorn app:app

@@ -1,0 +1,232 @@
+# Python-specific .gitignore for HTTP Server Flask Migration Project
+# Generated for migration from Node.js to Python 3 + Flask framework
+
+# ============================================================================
+# PYTHON RUNTIME ARTIFACTS
+# ============================================================================
+
+# Bytecode files - Python compilation artifacts
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+
+# Python cache directories
+.Python
+.python-version
+
+# ============================================================================
+# VIRTUAL ENVIRONMENTS
+# ============================================================================
+
+# Virtual environment directories - prevent repository pollution
+venv/
+env/
+.venv/
+.env/
+ENV/
+env.bak/
+venv.bak/
+
+# Conda environments
+.conda/
+
+# ============================================================================
+# PACKAGE MANAGEMENT & DISTRIBUTION
+# ============================================================================
+
+# pip package management artifacts
+pip-log.txt
+pip-delete-this-directory.txt
+pip-selfcheck.json
+
+# Distribution / packaging artifacts
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller artifacts
+*.manifest
+*.spec
+
+# ============================================================================
+# TESTING & COVERAGE ARTIFACTS
+# ============================================================================
+
+# pytest cache and artifacts per Section 6.6.2 test automation
+.pytest_cache/
+.cache/
+pytest.ini
+
+# Coverage reports and analysis
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+reports/
+.nyc_output
+
+# JUnit test reports
+junit.xml
+report.xml
+test-results.xml
+
+# Performance testing artifacts
+.prof
+*.svg
+
+# ============================================================================
+# DEVELOPMENT ENVIRONMENT
+# ============================================================================
+
+# Environment configuration - exclude .env but keep .env.example
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# IDE and editor artifacts
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# PyCharm specific artifacts
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Sublime Text artifacts
+*.sublime-project
+*.sublime-workspace
+
+# ============================================================================
+# FLASK & WEB FRAMEWORK ARTIFACTS
+# ============================================================================
+
+# Flask session files
+flask_session/
+instance/
+
+# Flask-SQLAlchemy database files (if added later)
+*.db
+*.sqlite
+*.sqlite3
+
+# Werkzeug cache
+.webassets-cache
+
+# ============================================================================
+# SYSTEM & OS ARTIFACTS
+# ============================================================================
+
+# macOS system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux system files
+.directory
+
+# ============================================================================
+# DOCKER & CONTAINERIZATION
+# ============================================================================
+
+# Docker development artifacts per Section 8.3.5
+.dockerignore
+docker-compose.override.yml
+
+# ============================================================================
+# LOGGING & MONITORING
+# ============================================================================
+
+# Log files
+*.log
+logs/
+log/
+
+# ============================================================================
+# TEMPORARY & CACHE FILES
+# ============================================================================
+
+# Temporary files
+tmp/
+temp/
+.tmp
+*.tmp
+
+# Cache directories
+.cache/
+cache/
+
+# ============================================================================
+# SECURITY & SENSITIVE DATA
+# ============================================================================
+
+# SSL certificates and keys
+*.pem
+*.key
+*.crt
+*.csr
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# ============================================================================
+# PROJECT-SPECIFIC EXCLUSIONS
+# ============================================================================
+
+# Documentation build artifacts
+docs/_build/
+docs/build/
+site/
+
+# Jupyter Notebook artifacts (if added for educational purposes)
+.ipynb_checkpoints/
+*.ipynb
+
+# mypy type checking cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Profiling artifacts
+.prof/
+profile_*.png
+
+# ============================================================================
+# END OF PYTHON .GITIGNORE
+# ============================================================================
